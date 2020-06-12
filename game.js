@@ -3,6 +3,7 @@ let Block = require('./block');
 module.exports = class Game {
 	constructor(n, m)
 	{
+		this.n = n;
 		this.m = m;
 		this.score = 0;
 		this.currentBlock = new Block(m);
@@ -19,7 +20,7 @@ module.exports = class Game {
 		setTimeout(() => {
 			if (!this.status)
 			{
-				this.currentBlock.move('move');
+				this.changePosition('move');
 				this.render();
 			}
 		}, 1000);
@@ -31,14 +32,14 @@ module.exports = class Game {
 		this.printField();
 	}
 
-	rotate(event)
+	changePosition(event)
 	{
 		if (event == 'space')
 		{
 			let blocks = this.blocks;
 			while(this.blocks != blocks + 1)
 			{
-				this.currentBlock.move('move');
+				this.changePosition('move');
 				this.forceRender();
 			}
 		}
@@ -55,7 +56,12 @@ module.exports = class Game {
 					this.currentBlock.move(event);
 			}
 			if(event == 'move')
+			{
+				if (this.checkSideBorder('move'))
 					this.currentBlock.move(event);
+				else
+					this.insertBlock();
+			}
 			else
 				this.currentBlock.rotate(event);
 
@@ -74,13 +80,20 @@ module.exports = class Game {
 						if (this.currentBlock.corpus[i][j] == '*' && this.field[this.currentBlock.coords[i][j].x][this.currentBlock.coords[i][j].y - 1] == '*')
 							return false;
 				}
-				else
+				else if (mode == 'right')
 				{
 					if (this.currentBlock.coords[i][j].y < this.m-1)
 						if (this.currentBlock.corpus[i][j] == '*' && this.field[this.currentBlock.coords[i][j].x][this.currentBlock.coords[i][j].y + 1] == '*')
 							return false;
 				}
-
+				else if (mode == 'move')
+				{
+					if (this.currentBlock.coords[i][j].x >= this.n-1 && this.currentBlock.corpus[i][j] == '*')
+						return false;
+					else
+						if (this.currentBlock.corpus[i][j] == '*' && this.field[this.currentBlock.coords[i][j].x + 1][this.currentBlock.coords[i][j].y] == '*')
+							return false;
+				}
 			}
 		return true;
 	}
@@ -104,17 +117,11 @@ module.exports = class Game {
 			{
 				let contains = this.currentBlock.contains(i, j);
 				if (contains)
-				{
 					process.stdout.write(contains + '  ');
-					if (i == this.field.length-1)
-						this.insertBlock();
-					else if (this.field[i+1][j] != '-')
-						this.insertBlock();
-				}
 				else
 					process.stdout.write(this.field[i][j] + '  ');
 			}
-			if (this.checkBorder(i))
+			if (this.checkLine(i))
 			{
 				this.forceRender;
 				this.break;
@@ -123,7 +130,7 @@ module.exports = class Game {
 		}
 	}
 
-	checkBorder(i)
+	checkLine(i)
 	{
 		let line = true;
 		for (let j = 0; j < this.field[i].length; j++)

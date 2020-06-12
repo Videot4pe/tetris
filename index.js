@@ -9,6 +9,6 @@ process.stdin.on('keypress', function (ch, key) {
 	if (key && key.ctrl && key.name == 'c')
 		process.exit(0);
 	else
-		game.rotate(key.name);
+		game.changePosition(key.name);
 });
 process.stdin.setRawMode(true);
