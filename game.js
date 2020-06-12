@@ -44,9 +44,45 @@ module.exports = class Game {
 		}
 		else
 		{
-			this.currentBlock.rotate(event);
+			if(event == 'left')
+			{
+				if (this.checkSideBorder('left'))
+					this.currentBlock.move(event);
+			}	
+			if(event == 'right')
+			{
+				if (this.checkSideBorder('right'))
+					this.currentBlock.move(event);
+			}
+			if(event == 'move')
+					this.currentBlock.move(event);
+			else
+				this.currentBlock.rotate(event);
+
 			this.forceRender();
 		}
+	}
+
+	checkSideBorder(mode)
+	{
+		for (let i = 0; i < this.currentBlock.coords.length; i++)
+			for (let j = 0; j < this.currentBlock.coords[i].length; j++)
+			{
+				if (mode == 'left')
+				{
+					if (this.currentBlock.coords[i][j].y > 0)
+						if (this.currentBlock.corpus[i][j] == '*' && this.field[this.currentBlock.coords[i][j].x][this.currentBlock.coords[i][j].y - 1] == '*')
+							return false;
+				}
+				else
+				{
+					if (this.currentBlock.coords[i][j].y < this.m-1)
+						if (this.currentBlock.corpus[i][j] == '*' && this.field[this.currentBlock.coords[i][j].x][this.currentBlock.coords[i][j].y + 1] == '*')
+							return false;
+				}
+
+			}
+		return true;
 	}
 
 	insertBlock()

@@ -49,8 +49,6 @@ module.exports = class Block
 			if (this.checkBorder('right', tmp) < this.m && this.checkBorder('left', tmp) > -1)
 				this.corpus = tmp;
 		}
-		else
-			this.move(event);
 	}
 
 	contains(i, j)
