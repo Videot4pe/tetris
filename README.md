@@ -1,8 +1,8 @@
 # Tetris
 
 Запуск:
-1) npm i;
-2) npm start.
+1) npm i
+2) npm start
 
 Управление:<br/>
 &#8592; - влево;<br/>
