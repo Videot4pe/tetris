@@ -113,7 +113,7 @@ module.exports = class Game {
 					this.status = true;
 					console.clear();
 					console.log('Game over =( \nСчет: ', this.score);
-					process.exit(1);
+					process.exit(0);
 				}
 	}
 }
