@@ -63,7 +63,7 @@ module.exports = class Game {
 					this.insertBlock();
 			}
 			else
-				this.currentBlock.rotate(event);
+				this.currentBlock.rotate(event, this.field);
 
 			this.forceRender();
 		}
@@ -76,12 +76,16 @@ module.exports = class Game {
 			{
 				if (mode == 'left')
 				{
+					if (this.currentBlock.coords[i][j].y == 0 && this.currentBlock.corpus[i][j] == '*')
+						return false;
 					if (this.currentBlock.coords[i][j].y > 0)
 						if (this.currentBlock.corpus[i][j] == '*' && this.field[this.currentBlock.coords[i][j].x][this.currentBlock.coords[i][j].y - 1] == '*')
 							return false;
 				}
 				else if (mode == 'right')
 				{
+					if (this.currentBlock.coords[i][j].y == this.m-1 && this.currentBlock.corpus[i][j] == '*')
+						return false;
 					if (this.currentBlock.coords[i][j].y < this.m-1)
 						if (this.currentBlock.corpus[i][j] == '*' && this.field[this.currentBlock.coords[i][j].x][this.currentBlock.coords[i][j].y + 1] == '*')
 							return false;

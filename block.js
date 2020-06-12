@@ -33,7 +33,7 @@ module.exports = class Block
 			this.rotate();
 	}
 
-	rotate(event)
+	rotate(event, field)
 	{
 		if (event == 'up' || event == 'down')
 		{
@@ -46,7 +46,7 @@ module.exports = class Block
 					tmp[i][j] = event == 'up' ? this.corpus[this.corpus[i].length - 1 - j][i] : this.corpus[j][this.corpus.length - 1 - i]
 				}
 			}
-			if (this.checkBorder('right', tmp) < this.m && this.checkBorder('left', tmp) > -1)
+			if (this.checkBorder('right', tmp) < this.m && this.checkBorder('left', tmp) > -1 && this.fill(field, tmp))
 				this.corpus = tmp;
 		}
 	}
@@ -68,18 +68,27 @@ module.exports = class Block
 				for (let j = 0; j < this.coords[i].length; j++)
 					this.coords[i][j].x++;
 		}
-		if (event == 'left' && this.checkBorder('left', this.corpus) > 0)
+		if (event == 'left')
 		{
 			for (let i = 0; i < this.coords.length; i++)
 				for (let j = 0; j < this.coords[i].length; j++)
 					this.coords[i][j].y--;
 		}
-		if (event == 'right' && this.checkBorder('right', this.corpus) < this.m-1)
+		if (event == 'right')
 		{
 			for (let i = 0; i < this.coords.length; i++)
 				for (let j = 0; j < this.coords[i].length; j++)
 					this.coords[i][j].y++;
 		}
+	}
+
+	fill(field, tmp)
+	{
+		for (let i = 0; i < this.coords.length; i++)
+			for (let j = 0; j < this.coords[i].length; j++)
+				if (tmp[i][j] == '*' && field[this.coords[i][j].x][this.coords[i][j].y] == '*')
+					return false;
+		return true;
 	}
 
 	checkBorder(mode, tmp)
