@@ -1,4 +1,3 @@
-const waitSync = require('wait-sync');
 let Block = require('./block');
 
 module.exports = class Game {

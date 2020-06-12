@@ -10,8 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "keypress": "^0.2.1",
-    "sync-rest-client": "^1.0.3",
-    "util": "^0.12.3"
+    "keypress": "^0.2.1"
   }
 }
